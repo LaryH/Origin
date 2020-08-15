@@ -29,12 +29,13 @@ export default [
     name: "Search",
     path: "/search/:keyword?",
     component: Search,
-    props(route) {
-      return {
-        keyword: route.params.keyword,
-        password: route.query.keyword,
-      };
-    },
+    // props: true,
+    // props(route) {
+    //   return {
+    //     keyword: route.params.keyword,
+    //     password: route.query.keyword,
+    //   };
+    // },
   },
   //重定向
   {

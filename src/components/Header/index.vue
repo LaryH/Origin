@@ -67,16 +67,20 @@ export default {
   },
   methods: {
     toSearch() {
-      let lacation = {
+      let location = {
         name: "Search",
         params: {
           keyword: this.keyword || undefined,
         },
-        query: {
-          keyword: this.keyword + " query",
-        },
+        // query: {
+        //   keyword: this.keyword,
+        // },
       };
-      this.$router.push(lacation);
+
+      location.query = this.$route.query || "";
+      console.log(location);
+
+      this.$router.push(location);
     },
   },
 };

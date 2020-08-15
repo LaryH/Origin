@@ -1,14 +1,13 @@
 <template>
   <div>
-    {{ keyword }}
-    {{ password }}
+    <TypeNav></TypeNav>
   </div>
 </template>
 
 <script>
 export default {
-  name: "",
-  props: ["keyword", "password"],
+  name: "Search",
+  // props: ["keyword", "password"],
 };
 </script>
 
