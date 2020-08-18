@@ -11,7 +11,7 @@
               v-for="(nav, index) in floor.navList"
               :key="index"
             >
-              <a href="#tab1" data-toggle="tab">{{ nav }}</a>
+              <a href="#tab1" data-toggle="tab">{{ nav.text }}</a>
             </li>
           </ul>
         </div>
@@ -21,17 +21,14 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li>节能补贴</li>
-                <li>4K电视</li>
-                <li>空气净化器</li>
-                <li>IH电饭煲</li>
-                <li>滚筒洗衣机</li>
-                <li>电热水器</li>
+                <li v-for="(keyword, index) in floor.keywords" :key="index">
+                  {{ keyword }}
+                </li>
               </ul>
-              <img src="../images/home/floor-1-1.png" />
+              <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
+              <!-- <div class="swiper-container" id="floor1Swiper">
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     <img src="../images/home/floor-1-b01.png" />
@@ -43,13 +40,14 @@
                     <img src="../images/home/floor-1-b03.png" />
                   </div>
                 </div>
-                <!-- 如果需要分页器 -->
+                如果需要分页器 
                 <div class="swiper-pagination"></div>
 
-                <!-- 如果需要导航按钮 -->
+                 如果需要导航按钮 
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
-              </div>
+              </div> -->
+              <SliderLoop :bannerList="floor.carouselList"></SliderLoop>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -61,7 +59,7 @@
               </div>
             </div>
             <div class="split center">
-              <img :src="floor.bigImage" />
+              <img :src="floor.bigImg" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>

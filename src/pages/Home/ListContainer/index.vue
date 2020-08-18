@@ -4,23 +4,24 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div
-            class="swiper-wrapper"
-            v-for="banner in bannerList"
-            :key="banner.id"
-          >
-            <div class="swiper-slide">
+        <!-- <div class="swiper-container" id="mySwiper" ref="banner">
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide"
+              v-for="banner in bannerList"
+              :key="banner.id"
+            >
               <img :src="banner.imgUrl" />
             </div>
           </div>
-          <!-- 如果需要分页器 -->
+           如果需要分页器 
           <div class="swiper-pagination"></div>
 
-          <!-- 如果需要导航按钮 -->
+           如果需要导航按钮 
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
+        <SliderLoop :bannerList="bannerList"></SliderLoop>
       </div>
       <div class="right">
         <div class="news">
@@ -96,39 +97,43 @@
 </template>
 
 <script>
-import Swiper from "swiper";
-import { mapState } from "vuex";
+// import Swiper from "swiper";
+// import "swiper/css/swiper.css";
+import { mapGetters } from "vuex";
 export default {
   name: "ListContainer",
   computed: {
-    ...mapState(["bannerList"]),
+    // ...mapState({
+    //   bannerList: (state) => state.home.banners,
+    // }),
+    ...mapGetters(["bannerList"]),
   },
-  watch: {
-    handle() {
-      this.$nextTick(() => {
-        new Swiper("#mySwiper", {
-          // direction: "vertical", // 垂直切换选项
-          loop: true, // 循环模式选项
+  // watch: {
+  //   handler() {
+  //     this.$nextTick(() => {r
+  //       new Swiper(this.$refs.banner, {
+  //         // direction: "vertical", // 垂直切换选项
+  //         // loop: true, // 循环模式选项
 
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination",
-          },
+  //         // 如果需要分页器
+  //         pagination: {
+  //           el: ".swiper-pagination",
+  //         },
 
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
+  //         // 如果需要前进后退按钮
+  //         navigation: {
+  //           nextEl: ".swiper-button-next",
+  //           prevEl: ".swiper-button-prev",
+  //         },
 
-          // 如果需要滚动条
-          // scrollbar: {
-          //   el: ".swiper-scrollbar",
-          // },
-        });
-      });
-    },
-  },
+  //         // 如果需要滚动条
+  //         // scrollbar: {
+  //         //   el: ".swiper-scrollbar",
+  //         // },
+  //       });
+  //     });
+  //   },
+  // },
   mounted() {
     this.$store.dispatch("getBannerList");
   },

@@ -17,7 +17,7 @@ import Like from "./Like";
 import ListContainer from "./ListContainer";
 import Rank from "./Rank";
 import Recommend from "./Recommend";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -29,7 +29,7 @@ export default {
     Recommend,
   },
   computed: {
-    ...mapState(["floorList"]),
+    ...mapGetters(["floorList"]),
   },
   mounted() {
     this.$store.dispatch("getFloorList");

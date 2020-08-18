@@ -78,9 +78,12 @@ export default {
       };
 
       location.query = this.$route.query || "";
-      console.log(location);
 
-      this.$router.push(location);
+      if (this.$route.path === "/home") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
 };

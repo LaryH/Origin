@@ -112,7 +112,11 @@ export default {
       if (data.category3id) {
         location.query.category3Id = data.category3id;
       }
-
+      if (this.$route.path === "/home") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
       this.$router.push(location);
     },
 

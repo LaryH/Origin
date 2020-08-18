@@ -2,25 +2,31 @@ import { reqCategoryList, reqBannerList, reqFloorList } from "@/api/";
 
 const state = {
   categorys: [],
-  banerList: [],
-  floorList: [],
+  banners: [],
+  floors: [],
 };
 
 const getters = {
   categoryList(state) {
     return state.categorys;
   },
+  bannerList(state) {
+    return state.banners;
+  },
+  floorList(state) {
+    return state.floors;
+  },
 };
 
 const mutations = {
-  SETCATEGORYS(state, payload) {
+  RECEIVESETCATEGORYS(state, payload) {
     state.categorys = payload;
   },
-  RECEIVEBANNERLIST(state, bannerList) {
-    state.bannerList = bannerList;
+  RECEIVEBANNERLIST(state, banners) {
+    state.banners = banners;
   },
-  RECEIVEFLOORLIST(state, floorList) {
-    state.floorList = floorList;
+  RECEIVEFLOORLIST(state, floors) {
+    state.floors = floors;
   },
 };
 
@@ -28,7 +34,7 @@ const actions = {
   category({ commit }) {
     reqCategoryList().then((response) => {
       if (response.code === 200) {
-        commit("SETCATEGORYS", response.data);
+        commit("RECEIVESETCATEGORYS", response.data);
       }
     });
   },
