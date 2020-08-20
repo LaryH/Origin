@@ -10,7 +10,7 @@ const getters = {
   goodsList(state) {
     return state.goodsListInfo.goodsList || [];
   },
-  tradeMarkList(state) {
+  trademarkList(state) {
     return state.goodsListInfo.trademarkList || [];
   },
 };

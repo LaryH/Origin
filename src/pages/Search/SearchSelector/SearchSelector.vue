@@ -5,7 +5,7 @@
       <div class="value logos">
         <ul class="logo-list">
           <li
-            v-for="trademark in tradeMarkList"
+            v-for="trademark in trademarkList"
             :key="trademark.tmId"
             @click="searchForTrademark(trademark)"
           >
@@ -49,13 +49,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["attrsList", "tradeMarkList"]),
-  },
-  updated() {
-    // console.log(this.attrsList);
-  },
-  mounted() {
-    // console.log(this.attrsList);
+    ...mapGetters(["attrsList", "trademarkList"]),
   },
 };
 </script>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import NProgress from "nprogress";
-import "nprogress/nprogress";
 import "nprogress/nprogress.css";
+import store from "@/store/store";
 
 const server = axios.create({
   baseURL: "/api",
@@ -9,9 +9,12 @@ const server = axios.create({
   // headers:
 });
 
-server.interceptors.request.use((req) => {
+server.interceptors.request.use((config) => {
+  //把用户的临时身份标识添加每次请求的请求头中
+  let userTempId = store.state.user.userTempId;
+  config.headers.userTempId = userTempId;
   NProgress.start();
-  return req;
+  return config;
 });
 
 server.interceptors.response.use(

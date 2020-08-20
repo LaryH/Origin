@@ -79,12 +79,22 @@ export default {
 
       location.query = this.$route.query || "";
 
-      if (this.$route.path === "/home") {
+      // if (this.$route.query) {
+      //   location.query = this.$route.query;
+      // }
+
+      if (this.$route.path !== "/home") {
         this.$router.replace(location);
       } else {
         this.$router.push(location);
       }
     },
+    clearKeyword() {
+      this.keyword = "";
+    },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", this.clearKeyword);
   },
 };
 </script>

@@ -49,8 +49,21 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: searchParams.order.split(':')[0] === '1' }"
+                  @click="changeOrder('1')"
+                >
+                  <a href="#"
+                    >综合
+                    <i
+                      class="iconfont"
+                      :class="{
+                        icondown: searchParams.order.split(':')[1] === 'desc',
+                        iconup: searchParams.order.split(':')[1] === 'asc',
+                      }"
+                      v-if="searchParams.order.split(':')[0] === '1'"
+                    ></i
+                  ></a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -61,11 +74,20 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{ active: searchParams.order.split(':')[0] === '2' }"
+                  @click="changeOrder('2')"
+                >
+                  <a href="#"
+                    >价格<i
+                      class="iconfont"
+                      :class="{
+                        icondown: searchParams.order.split(':')[1] === 'desc',
+                        iconup: searchParams.order.split(':')[1] === 'asc',
+                      }"
+                      v-if="searchParams.order.split(':')[0] === '2'"
+                    ></i
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -75,9 +97,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -86,12 +108,9 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <router-link :to="`/detail/${goods.id}`">{{
+                      goods.title
+                    }}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -111,35 +130,13 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination
+            :currentPageNum="searchParams.pageNo"
+            :total="total"
+            :pageSize="searchParams.pageSize"
+            :continuousPage="3"
+            @changePageNum="changePageNum"
+          />
         </div>
       </div>
     </div>
@@ -148,7 +145,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -169,44 +166,59 @@ export default {
     };
   },
   methods: {
+    changePageNum(pageNum) {
+      this.searchParams.pageNo = pageNum;
+      this.getGoodsListInfo();
+    },
     getGoodsListInfo() {
       this.$store.dispatch("getGoodsListInfo", this.searchParams);
     },
     handerSearchParams() {
       let { keyword } = this.$route.params;
       let {
+        categoryName,
         category1Id,
         category2Id,
         category3Id,
-        categoryName,
       } = this.$route.query;
 
       let searchParams = {
         ...this.searchParams,
         keyword,
+        categoryName,
         category1Id,
         category2Id,
         category3Id,
-        categoryName,
       };
 
-      //优化参数,空串不传
+      //这个参数，如果传的是空串，就没必要，剁了
+      //为了节省传递数据占用的带宽，为了让后端压力减小
       Object.keys(searchParams).forEach((item) => {
-        if (searchParams[item] === "") delete searchParams[item];
+        if (searchParams[item] === "") {
+          delete searchParams[item];
+        }
       });
 
+      //把我们搜索的参数数据变为当前的这个处理后的对象
       this.searchParams = searchParams;
     },
     removeCategoryName() {
+      this.searchParams.pageNo = 1;
       this.searchParams.categoryName = "";
       // this.getGoodsListInfo();
+      // this.$router.replace({
+      //   name: "Search",
+      //   params: this.$route.params,
+      // });
       this.$router.replace({
         name: "Search",
         params: this.$route.params,
       });
     },
     removeKeyword() {
+      this.searchParams.pageNo = 1;
       this.searchParams.keyword = "";
+      this.$bus.$emit("clearKeyword");
       // this.getGoodsListInfo();
       this.$router.replace({
         name: "Search",
@@ -214,17 +226,19 @@ export default {
       });
     },
     removeTrademark() {
+      this.searchParams.pageNo = 1;
       this.searchParams.trademark = "";
       this.getGoodsListInfo();
     },
     removeProp(index) {
+      this.searchParams.pageNo = 1;
       this.searchParams.props.splice(index, 1);
       this.getGoodsListInfo();
     },
     searchForTrademark(trademark) {
+      this.searchParams.pageNo = 1;
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
       this.getGoodsListInfo();
-      console.log(this.searchParams);
     },
     searchForAttrValue(attr, attrValue) {
       //"属性ID:属性值:属性名"
@@ -237,16 +251,37 @@ export default {
       let num = this.searchParams.props.indexOf(
         `${attr.attrId}:${attrValue}:${attr.attrName}`
       );
-
       if (num !== -1) return;
+      this.searchParams.pageNo = 1;
       this.searchParams.props.push(
         `${attr.attrId}:${attrValue}:${attr.attrName}`
       );
       this.getGoodsListInfo();
     },
+    changeOrder(orderFlag) {
+      this.searchParams.pageNo = 1;
+      let originOrderFlag = this.searchParams.order.split(":")[0];
+      let originOrderType = this.searchParams.order.split(":")[1];
+      let newOrder = "";
+
+      if (orderFlag === originOrderFlag) {
+        //还是原来那个
+        newOrder = `${orderFlag}:${
+          originOrderType === "desc" ? "asc" : "desc"
+        }`;
+      } else {
+        newOrder = `${orderFlag}:desc`;
+      }
+
+      this.searchParams.order = newOrder;
+      this.getGoodsListInfo();
+    },
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    ...mapState({
+      total: (state) => state.search.goodsListInfo.total,
+    }),
   },
   //mounted一般用来异步请求数据
   //beforeMount 一般用来同步处理数据(参数)

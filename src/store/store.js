@@ -4,6 +4,8 @@ import Vuex from "vuex";
 import home from "./home";
 import user from "./user";
 import search from "./search";
+import detail from "./detail";
+import shopCart from "./shopCart";
 
 Vue.use(Vuex);
 const state = {};
@@ -20,6 +22,8 @@ const store = new Vuex.Store({
     home,
     user,
     search,
+    detail,
+    shopCart,
   },
 });
 

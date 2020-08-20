@@ -1,7 +1,7 @@
 //加工ajax请求函数,使其进行定向请求指定数据
 
-import Ajax from "@/service/ajax";
-import MockAjax from "@/service/mockajax";
+import Ajax from "@/server/ajax";
+import MockAjax from "@/server/mockajax";
 
 // const reqCategoryList = () => {
 //   return Ajax.get('/product/getBaseCategoryList"');
@@ -39,4 +39,35 @@ const reqGoodsListInfo = (searchParams) => {
   });
 };
 
-export { reqCategoryList, reqBannerList, reqFloorList, reqGoodsListInfo };
+const reqGoodsDetailInfo = (skuId) => {
+  return Ajax({
+    url: `/item/${skuId}`,
+    method: "GET",
+  });
+};
+
+//请求添加购物车或者修改购物车
+///api/cart/addToCart/{ skuId }/{ skuNum }
+const reqAddOrUpdateCart = (skuId, skuNum) => {
+  return Ajax({
+    url: `/cart/addToCart/${skuId}/${skuNum}`,
+    method: "POST",
+  });
+};
+//获取购物车列表
+///api/cart/cartList
+const reqShopCartList = () => {
+  return Ajax({
+    url: "/cart/cartList",
+    method: "GET",
+  });
+};
+export {
+  reqCategoryList,
+  reqBannerList,
+  reqFloorList,
+  reqGoodsListInfo,
+  reqGoodsDetailInfo,
+  reqAddOrUpdateCart,
+  reqShopCartList,
+};
