@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in shopCartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @click="checkIt(cart)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -26,15 +31,26 @@
             <span class="price">{{ cart.cartPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="updateCartNum(cart, -1)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @change="updateCartNum(cart, +$event.target.value)"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="updateCartNum(cart, 1)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.cartPrice }}</span>
@@ -49,7 +65,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isCheckedAll" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -58,10 +74,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ checkedNum }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{ allMoney }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -79,11 +98,72 @@ export default {
     getShopCartList() {
       this.$store.dispatch("getShopCartList");
     },
+    async checkIt(cart) {
+      // let isChecked = cart.isChecked ? 0 : 1;
+      try {
+        await this.$store.dispatch("updateIsCheck", {
+          skuId: cart.skuId,
+          isChecked: +!cart.isChecked,
+        });
+        this.getShopCartList();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async updateCartNum(cart, disNum) {
+      if (cart.skuNum + disNum < 1) {
+        disNum = 1 - cart.skuNum;
+      }
+
+      //发请求去处理商品数量
+      try {
+        await this.$store.dispatch("addOrUpdateCart", {
+          skuId: cart.skuId,
+          skuNum: disNum,
+        });
+        this.getShopCartList();
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
   },
   computed: {
     ...mapState({
       shopCartList: (state) => state.shopCart.shopCartList,
     }),
+    isCheckedAll: {
+      get() {
+        return this.shopCartList.every((item) => item.isChecked === 1);
+      },
+      async set(val) {
+        // this.shopCartList.forEach((item) => {
+        //    item.isChecked = item.isChecked ? 0 : 1;
+        // });
+        try {
+          await this.$store.dispatch("updateAllIsCheck", val ? 1 : 0);
+          this.getShopCartList();
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+    checkedNum() {
+      return this.shopCartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          p += c.skuNum;
+        }
+        return p;
+      }, 0);
+    },
+    allMoney() {
+      return this.shopCartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          p += c.skuNum * c.cartPrice;
+        }
+        return p;
+      }, 0);
+    },
   },
   mounted() {
     this.getShopCartList();

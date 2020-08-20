@@ -6,7 +6,15 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="$store.state.user.userInfo.name">
+            <a href="###">{{ $store.state.user.userInfo.name }}</a>
+            <!-- <router-link to="/login">{{
+              $store.state.user.userInfo.name
+            }}</router-link> -->
+            <a href="###" class="register" @click.prevent="logout">退出登录</a>
+            <!-- <router-link to="/register" class="register">免费注册</router-link> -->
+          </p>
+          <p v-else>
             <span>请</span>
             <!-- <a href="###">登录</a> -->
             <router-link to="/login">登录</router-link>
@@ -91,6 +99,15 @@ export default {
     },
     clearKeyword() {
       this.keyword = "";
+    },
+    async logout() {
+      try {
+        await this.$store.dispatch("logout");
+        alert("退出成功");
+        this.$router.push("/home");
+      } catch (error) {
+        console.log(error.message);
+      }
     },
   },
   mounted() {

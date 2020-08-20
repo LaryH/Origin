@@ -10,27 +10,37 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" />
+        <input type="text" placeholder="请输入你的手机号" v-model="mobile" />
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" />
-        <img
+        <input type="text" placeholder="请输入验证码" v-model="code" />
+        <!-- <img
           ref="code"
           src="http://182.92.128.115/api/user/passport/code"
           alt="code"
+        /> -->
+        <img
+          ref="code"
+          src="/api/user/passport/code"
+          alt="code"
+          @click="resetCode"
         />
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码" />
+        <input
+          type="text"
+          placeholder="请输入你的登录密码"
+          v-model="password"
+        />
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" />
+        <input type="text" placeholder="请输入确认密码" v-model="password2" />
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="controls">
@@ -39,7 +49,7 @@
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="register">完成注册</button>
       </div>
     </div>
     <!-- 底部 -->
@@ -63,6 +73,31 @@
 <script>
 export default {
   name: "Register",
+  data() {
+    return {
+      mobile: "",
+      code: "",
+      password: "",
+      password2: "",
+    };
+  },
+  methods: {
+    register() {
+      let { mobile, code, password, password2 } = this;
+      if (mobile && code && password && password === password2) {
+        try {
+          this.$store.dispatch("register", { mobile, code, password });
+          alert("注册成功,自动跳转登录页");
+          this.$router.push("/login");
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+    },
+    resetCode() {
+      this.$refs.code.src = "/api/user/passport/code";
+    },
+  },
 };
 </script>
 

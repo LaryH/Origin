@@ -62,6 +62,45 @@ const reqShopCartList = () => {
     method: "GET",
   });
 };
+
+///api/cart/checkCart/{skuID}/{isChecked}
+//请求更改选择状态
+
+const reqUpdateIsCheck = (skuId, isChecked) => {
+  return Ajax({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: "GET",
+  });
+};
+
+//请求注册
+///api/user/passport/register
+const reqRegister = (mobile, password, code) => {
+  return Ajax({
+    url: "/user/passport/register",
+    method: "post",
+    data: { mobile, password, code },
+  });
+};
+
+//请求登录
+const reqLogin = ({ mobile, password }) => {
+  return Ajax({
+    url: "/user/passport/login",
+    method: "post",
+    data: { mobile, password },
+  });
+};
+
+//退出登录
+//api/user/passport/logout
+const reqLogout = () => {
+  return Ajax({
+    url: "/user/passport/logout",
+    method: "get",
+  });
+};
+
 export {
   reqCategoryList,
   reqBannerList,
@@ -70,4 +109,8 @@ export {
   reqGoodsDetailInfo,
   reqAddOrUpdateCart,
   reqShopCartList,
+  reqUpdateIsCheck,
+  reqRegister,
+  reqLogin,
+  reqLogout,
 };
