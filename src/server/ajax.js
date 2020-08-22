@@ -13,6 +13,13 @@ server.interceptors.request.use((config) => {
   //把用户的临时身份标识添加每次请求的请求头中
   let userTempId = store.state.user.userTempId;
   config.headers.userTempId = userTempId;
+
+  //把登录后的标识token也添加到请求头中
+  let token = store.state.user.userInfo.token;
+  if (token) {
+    config.headers.token = token;
+  }
+  
   NProgress.start();
   return config;
 });

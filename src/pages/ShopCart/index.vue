@@ -56,7 +56,9 @@
             <span class="sum">{{ cart.skuNum * cart.cartPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="deleteCart(cart.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -69,7 +71,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click="deleteCarts">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -83,7 +85,8 @@
           <i class="summoney">{{ allMoney }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <!-- <a class="sum-btn" href="###" target="_blank">结算</a> -->
+          <router-link to="/trade" class="sum-btn">结算</router-link>
         </div>
       </div>
     </div>
@@ -125,6 +128,24 @@ export default {
         this.getShopCartList();
       } catch (error) {
         console.log(error.message);
+      }
+    },
+
+    async deleteCart(skuId) {
+      try {
+        await this.$store.dispatch("deleteCart", skuId);
+        this.getShopCartList();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async deleteCarts() {
+      try {
+        await this.$store.dispatch("deleteCarts");
+        this.getShopCartList();
+      } catch (error) {
+        console.log(error);
       }
     },
   },

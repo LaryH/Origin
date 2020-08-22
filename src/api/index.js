@@ -63,6 +63,16 @@ const reqShopCartList = () => {
   });
 };
 
+//删除购物车
+// /api/cart/deleteCart/{skuId}
+const reqDeleteCart = (skuId) => {
+  return Ajax({
+    url: `/cart/cartList/${skuId}`,
+    method: "DELETE",
+    // data: skuId,
+  });
+};
+
 ///api/cart/checkCart/{skuID}/{isChecked}
 //请求更改选择状态
 
@@ -101,6 +111,39 @@ const reqLogout = () => {
   });
 };
 
+//创建订单交易
+// /api/order/auth/trade
+const reqTradeOrder = () => {
+  return Ajax({
+    url: "/order/auth/trade",
+    method: "GET",
+  });
+};
+
+//提交订单
+///api/order/auth/submitOrder?tradeNo={tradeNo}
+const reqSubmitOrder = (tradeNo, tradeInfo) => {
+  return Ajax({
+    url: `/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    method: "POST",
+    data: tradeInfo,
+  });
+};
+
+//获取订单支付信息
+///api/payment/weixin/createNative/{orderId}
+const reqOrderInfo = (orderId) => {
+  return Ajax.get(`/payment/weixin/createNative/${orderId}`);
+};
+
+//获取订单支付状态的数据
+// /api/payment/weixin/queryPayStatus/{orderId}
+const reqOrderstatus = (orderId) => {
+  return Ajax({
+    url: `/payment/weixin/queryPayStatus/${orderId}`,
+    method: "GET",
+  });
+};
 export {
   reqCategoryList,
   reqBannerList,
@@ -113,4 +156,9 @@ export {
   reqRegister,
   reqLogin,
   reqLogout,
+  reqDeleteCart,
+  reqTradeOrder,
+  reqOrderstatus,
+  reqOrderInfo,
+  reqSubmitOrder,
 };

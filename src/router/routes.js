@@ -1,12 +1,32 @@
+import AddCartSuccess from "@/pages/AddCartSuccess";
+import Detail from "@/pages/Detail";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Search from "@/pages/Search";
-import Detail from "@/pages/Detail";
-import AddCartSuccess from "@/pages/AddCartSuccess";
 import ShopCart from "@/pages/ShopCart";
+import Trade from "@/pages/Trade";
+import Pay from "@/pages/Pay";
+import Paysuccess from "@/pages/PaySuccess";
+import Center from "@/pages/Center";
 
 export default [
+  {
+    path: "/center",
+    component: Center,
+  },
+  {
+    path: "/paysuccess",
+    component: Paysuccess,
+  },
+  {
+    path: "/pay",
+    component: Pay,
+  },
+  {
+    path: "/trade",
+    component: Trade,
+  },
   {
     path: "/shopcart",
     component: ShopCart,
