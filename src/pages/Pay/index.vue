@@ -133,14 +133,14 @@ export default {
             //如果不朽这个回到,那会无论点击上面按钮,消息盒子都会强制关闭
             //如果写了这个回调,那么消息盒子的关闭有自己控制;
             if (action === "confirm") {
-              if (this.status !== 200) {
-                this.$message.warning("未支付成功,请重新支付");
-              }
+              // if (this.status !== 200) {
+              //   this.$message.warning("未支付成功,请重新支付");
+              // }
               //测试环境
-              // clearInterval(this.timer); //clearInterval 清楚定时器,停止给定编号的定时器,并没有清空存储编号的变量
-              // this.timer = null;
-              // this.$msgbox.close();
-              // this.$router.push("/paysuccess");
+              clearInterval(this.timer); //clearInterval 清楚定时器,停止给定编号的定时器,并没有清空存储编号的变量
+              this.timer = null;
+              this.$msgbox.close();
+              this.$router.push("/paysuccess");
             } else if (action === "cancel") {
               this.$message.warning("请联系客服处理");
               clearInterval(this.timer);

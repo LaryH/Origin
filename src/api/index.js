@@ -67,7 +67,7 @@ const reqShopCartList = () => {
 // /api/cart/deleteCart/{skuId}
 const reqDeleteCart = (skuId) => {
   return Ajax({
-    url: `/cart/cartList/${skuId}`,
+    url: `/cart/deleteCart/${skuId}`,
     method: "DELETE",
     // data: skuId,
   });
