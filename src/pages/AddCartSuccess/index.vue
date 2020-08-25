@@ -37,6 +37,14 @@ export default {
       skuInfo: JSON.parse(sessionStorage.getItem("SKUINFO_KEY")),
     };
   },
+  //没有this
+  beforeRouteEnter(to, from, next) {
+    next(() => {
+      if (to.query.skuNum && sessionStorage.getItem("SKUINFO_KEY")) {
+        next();
+      }
+    });
+  },
 };
 </script>
 

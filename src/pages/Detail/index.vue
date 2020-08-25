@@ -362,6 +362,7 @@ export default {
   data() {
     return { skuNum: 1 };
   },
+
   mounted() {
     this.getGoodsDetailInfo();
   },

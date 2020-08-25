@@ -144,6 +144,15 @@ const reqOrderstatus = (orderId) => {
     method: "GET",
   });
 };
+
+//获取我的订单分页列表
+// /api/order/auth/{page}/{limit}
+const reqMyOrderInfo = (page, limit) => {
+  return Ajax({
+    url: `/order/auth/${page}/${limit}`,
+    method: "GET",
+  });
+};
 export {
   reqCategoryList,
   reqBannerList,
@@ -161,4 +170,5 @@ export {
   reqOrderstatus,
   reqOrderInfo,
   reqSubmitOrder,
+  reqMyOrderInfo,
 };

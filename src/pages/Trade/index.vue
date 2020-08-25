@@ -40,7 +40,7 @@
           :key="goods.skuId"
         >
           <li>
-            <img src="./images/goods.png" alt="" />
+            <img :src="goods.imgUrl" alt="" />
           </li>
           <li>
             <p>
@@ -317,10 +317,13 @@ export default {
         justify-content: space-between;
 
         li {
-          line-height: 30px;
+          line-height: 20px;
 
           p {
             margin-bottom: 20px;
+          }
+          img {
+            width: 50px;
           }
 
           h4 {

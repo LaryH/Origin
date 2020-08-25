@@ -6,13 +6,19 @@ import "@/mock/mockService";
 import "swiper/css/swiper.css";
 import * as API from "@/api";
 import "default-passive-events";
+import "./validate";
+
+import VueLazyLoad from "vue-lazyload";
+import loading from "@/assets/loading.gif";
 
 import TypeNav from "./components/TypeNav";
 import SliderLoop from "./components/SliderLoop";
-import Pagination from "./components/Pagination";
+import Paginations from "./components/Pagination";
 
-import { MessageBox, Message } from "element-ui";
+import { MessageBox, Message, Pagination } from "element-ui";
 
+Vue.use(VueLazyLoad, { loading });
+Vue.use(Pagination);
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$message = Message;
@@ -21,7 +27,7 @@ Vue.config.productionTip = false;
 
 Vue.component("TypeNav", TypeNav);
 Vue.component("SliderLoop", SliderLoop);
-Vue.component("Pagination", Pagination);
+Vue.component("Paginations", Paginations);
 
 new Vue({
   beforeCreate() {

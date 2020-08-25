@@ -17,18 +17,33 @@
             <form action="##">
               <div class="input-text clearFix">
                 <i></i>
-                <input type="text" placeholder="手机号" v-model="mobile" />
-                <span class="error-msg">错误提示信息</span>
+                <input
+                  type="text"
+                  placeholder="手机号"
+                  v-model="mobile"
+                  name="phone"
+                  v-validate="{
+                    required: true,
+                    regex: /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
+                  }"
+                  :class="{ invalid: errors.has('phone') }"
+                />
+                <span class="error-msg">{{ errors.first("phone") }}</span>
+                <!-- <input type="text" placeholder="手机号" v-model="mobile" />
+                <span class="error-msg">错误提示信息</span> -->
               </div>
 
               <div class="input-text clearFix">
                 <i class="pwd"></i>
                 <input
                   type="text"
+                  name="password"
                   placeholder="请输入密码"
                   v-model="password"
+                  v-validate="{ required: true, regex: /^[a-zA-Z0-9]{6,20}$/ }"
+                  :class="{ invalid: errors.has('password') }"
                 />
-                <span class="error-msg">错误提示信息</span>
+                <span class="error-msg">{{ errors.first("password") }}</span>
               </div>
 
               <div class="setting clearFix">
@@ -80,16 +95,40 @@ export default {
     return {
       mobile: "",
       password: "",
+      result: false,
     };
+  },
+  //组件导航守卫
+
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    // if (this.result) return;
+    // next();
+
+    // 通过 `vm` 访问组件实例
+    next((vm) => {
+      if (vm.$store.state.user.userInfo.name) next("/");
+      next();
+    });
   },
   methods: {
     async login() {
       let { mobile, password } = this;
       if (mobile && password) {
         try {
-          await this.$store.dispatch("login", { mobile, password });
+          this.result = await this.$store.dispatch("login", {
+            mobile,
+            password,
+          });
           alert("登录成功");
-          this.$router.push("/home");
+          let redirect = this.$route.query.redirect;
+          if (redirect) {
+            this.$router.push(redirect);
+          } else {
+            this.$router.push("/home");
+          }
         } catch (error) {
           console.log(error.message);
         }
